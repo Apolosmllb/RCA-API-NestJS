@@ -15,31 +15,29 @@ import { IamManagementModule } from "./iam-management/iam-management.module";
     ConfigModule.forRoot({
       isGlobal: true
     }),
-
     TypeOrmModule.forRoot({
       type: "mysql",
-      host: "rca-parsimonia-server.mysql.database.azure.com",
+      host: "localhost",
       port: 3306,
-      username: "rca123parsimonia",
-      password: "edco-password1",
+      username: "root",
+      password: "1234",
       database: "rca-db",
       autoLoadEntities: true,
       synchronize: true,
       ssl: true,
       migrationsRun: true,
-      logging: true,
-      //timezone: '+0',
+      logging: false,
       bigNumberStrings: false,
+      entities: [
+        process.env.ENVIRONMENT == "prod"
+          ? "./domain/entities/*.entity.js"
+          : "./dist/domain/entities/*.entity.js"
+      ],
       extra: {
         ssl: {
           rejectUnauthorized: false
         }
-      },
-      entities: [
-        process.env.ENVIRONMENT == "prod"
-          ? "**/domain/entities/*.js"
-          : "dist/**/domain/entities/*.js"
-      ]
+      }
     }),
     RentingManagementModule,
     BillingManagementModule,
